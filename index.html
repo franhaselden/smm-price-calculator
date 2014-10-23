@@ -9,14 +9,24 @@
 <body>
 <div class="wrapper">
 	<!--<h1>Student Makers Market Pricing Calculator</h1>-->
-	<p>How much should I charge for a product I’ve made? How much will fees cost?</p>
+	<p>How much should I charge for a product I've made? How much will fees cost?</p>
 	<p>A good rule of thumb is the <strong>materials cost x 2 + 20%</strong>(the 20% part is the VAT element, so when selling wholesale don't add 20%), but this does not factor in the cost of fees for selling online.</p>
-	<p>This calculator is only a guide to help you decide how much to charge. Charge whatever you feel comfortable with, but don’t undervalue yourself!</p>
+	<p>This calculator is only a guide to help you decide how much to charge. Charge whatever you feel comfortable with, but don't undervalue yourself!</p>
 	<form id="calc">
 		<span><input type="radio" name="option" class="decisionRadio" id="dontknow" value="dontknow">I don't know how much to charge at all<br></span>
 		<div class="dontknow-calc">
-			
-
+			<span><label>My materials cost</label>&nbsp;&pound;<input type="text" name="materialcost" id="materialcost" placeholder="17.20" /><br /></span>
+			<span><label>My packing materials cost</label>&nbsp;&pound;<input type="text" name="packingmaterialcost" id="packingmaterialcost" placeholder="1.10" /><br /></span>
+			<span><label>My parcel weighs</label>&nbsp;<input type="text" name="parcelweight" id="parcelweight" placeholder="250" />g<br /></span>
+			<span><label>My parcel is a</label>&nbsp;
+				<select>
+				  <option value="letter">Letter</option>
+				  <option value="lgletter">Large Letter</option>
+				  <option value="sparcel">Small parcel</option>
+				  <option value="mparcel">Medium parcel</option>
+				  <option value="lparcel">Large parcel</option>
+				</select>
+&nbsp;<small>Not sure?</small><br /></span>
 		</div>
 		<span><input type="radio" name="option" class="decisionRadio" id="haveprice" value="haveprice">I know how much I charge offline and I only need to factor in fees for online selling</span>
 		<div class="haveprice-calc">

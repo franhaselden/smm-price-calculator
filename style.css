@@ -6,4 +6,9 @@ form#calc span{margin-bottom:15px;display:block;}
 .dontknow-calc, .haveprice-calc{
 	display:none;
 	overflow: hidden;
+	margin:20px 0 20px 20px;
+}
+
+.calc-modal{
+	
 }
