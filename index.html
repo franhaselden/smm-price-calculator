@@ -26,13 +26,63 @@
 				  <option value="mparcel">Medium parcel</option>
 				  <option value="lparcel">Large parcel</option>
 				</select>
-&nbsp;<small>Not sure?</small><br /></span>
+&nbsp;<small class="open-modal">Not sure?</small><br /></span>
 		</div>
 		<span><input type="radio" name="option" class="decisionRadio" id="haveprice" value="haveprice">I know how much I charge offline and I only need to factor in fees for online selling</span>
 		<div class="haveprice-calc">
 			<h3>Test</h3>
 		</div>
 	</form>
+<div id="calc-modal">
+	<div class="inner-modal">
+		<h3>Royal Mail Parcel Types</h3>
+		<p>Make sure you select the correct parcel type or your customer could be charged to collect their item</p>
+		<table border="1">
+				<tr>
+					<td>Parcel Type</td>
+					<td>Max weight</td>
+					<td>Max length</td>
+					<td>Max width</td>
+					<td>Max depth</td>
+				</tr>
+			<tbody>
+				<tr>
+					<td>Letter</td>
+					<td>100g</td>
+					<td>24cm</td>
+					<td>16.5cm</td>
+					<td>5mm</td>
+				</tr>
+				<tr>
+					<td>Large Letter</td>
+					<td>750g</td>
+					<td>35.3cm</td>
+					<td>25cm</td>
+					<td>2.5cm</td>
+				</tr>
+				<tr>
+					<td>Small Parcel</td>
+					<td>2kg</td>
+					<td>45cm</td>
+					<td>35cm</td>
+					<td>16cm</td>
+				</tr>
+				<tr>
+					<td>Medium Parcel</td>
+					<td>20kg</td>
+					<td>61cm</td>
+					<td>46cm</td>
+					<td>46cm</td>
+				</tr>
+				<tr>
+					<td colspan="5">Anything larger than a medium parcel can be sent using Parcel Force</td>
+				</tr>
+			</tbody>
+		</table>
+		<span class="close-modal">Close</span>
+	</div>
+</div>
+
 </div>
 </body>
 <script>
@@ -42,6 +92,14 @@ $( ".decisionRadio" ).change(function() {
   $("." + checked + "-calc").slideDown( "slow", function() {});
   $("." + unchecked + "-calc").slideUp( "slow", function() {});
 });
-</script
+
+$( ".open-modal" ).click(function() {
+	$('#calc-modal').fadeIn("fast");
+});
+
+$( ".close-modal" ).click(function() {
+	$('#calc-modal').fadeOut("fast");
+});
+</script>
 
 </html>
