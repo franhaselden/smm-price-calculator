@@ -19,7 +19,7 @@
 			<span><label>My packing materials cost</label>&nbsp;&pound;<input type="text" name="packingmaterialcost" id="packingmaterialcost" placeholder="1.10" /><br /></span>
 			<span><label>My parcel weighs</label>&nbsp;<input type="text" name="parcelweight" id="parcelweight" placeholder="250" />g<br /></span>
 			<span><label>My parcel is a</label>&nbsp;
-				<select>
+				<select name="parceltype" id="parceltype">
 				  <option value="letter">Letter</option>
 				  <option value="lgletter">Large Letter</option>
 				  <option value="sparcel" selected="selected">Small parcel</option>
@@ -27,7 +27,7 @@
 				  <option value="lparcel">Large parcel</option>
 				</select>
 &nbsp;<small class="open-modal">Not sure?</small><br /></span>
-			<div class="btn btnCalc" id="dontknow">Calculate</div><p class="errorMsg">You must fill in all the fields</p>
+			<div class="btn btnCalc" id="dontknow">Calculate</div><p class="errorMsg">You must fill in all the fields</p><p class="errorMsgPostal">The weight is too heavy for this parcel type.&nbsp;<small class="open-modal">Not sure which parcel type?</small></p>
 				<div class="result">
 					<p>You should charge around £19.85 for your product.<br />
 					You will take home £17.60.</p>
@@ -103,8 +103,11 @@ $(".decisionRadio").change(function() {
 
 $(".btnCalc").click(function() {
 	var id = this.id;
-	console.log(id);
 	var valid = validate(id);
+	if (valid == true){
+		var postageValid = checkPostage();
+		//calculate(id);
+	}
 });
 
 $(".open-modal").click(function() {
@@ -116,19 +119,109 @@ $(".close-modal").click(function() {
 });
 
 function validate(id){
-    // checks only inputs with type "text" inside div id-calc
-    // e.g #haveprice-calc or #dontknow-calc
     var div = $("." + id + "-calc");
+    var success = true;
     $(div).find("input[type = 'text']").each(function() {
         if(this.value == ""){
             $(this).addClass("errorInput");
        		$(".errorMsg").show();
        		$('.errorMsg').css('display','inline-block');
+       		success = false;
        	}else{
        		$(this).removeClass("errorInput");
        		$(".errorMsg").hide();
        	}
     });
+    return success;
+}
+
+function calculate(id){
+	if (id = "dontknow"){
+		var materialcost = $('input[name=materialcost]').val();
+		var packingmaterialcost = $('input[name=packingmaterialcost]').val();
+		var parcelweight = $('input[name=parcelweight]').val();
+		var parceltype = $('input[name=parceltype]').val();
+
+		calculatePostage(parcelweight,parceltype);
+
+		var a = materialcost*2; // times 2
+		var b = a/100; // find 1%
+		var c = b*120; // find 120%
+		var d = c/100; // find 1% of that
+		var e = d*110; // find 110%
+		var f = e/100; // find 1% of that
+		var g = f*103.4; // find 103.4%
+		var h = g+0.2; // Add 20p
+
+		// Round to 2 decimals
+		fullprice = h.toFixed(2);
+		console.log("You should charge:" + fullprice);
+
+		// Work out what commissions will be
+		paypalfee = f.toFixed(2);
+		console.log("First, PayPal will take 3.4% and 20p, that's a payment fee of " + paypalfee);
+
+		//console.log("Next, SMM will take 10% commission for promoting your product. That's " + smmfee);
+		//console.log("You'll receive " + makerfee);
+
+	}else if (id = "haveprice"){
+
+	}
+}
+
+function checkPostage(){
+	var parcelweight = $('input[name=parcelweight]').val();
+	var parceltype = $('#parceltype').find(":selected").text();
+	var success = true;
+	if (parceltype == "Letter"){
+		if (parcelweight <= 100){
+			removePostalError();
+			return success;
+		}else{
+			addPostalError();
+       		success = false;
+       		return success;
+		}
+	}else if (parceltype == "Large Letter"){
+		if (parcelweight <= 750){
+			removePostalError();
+			return success;
+		}else{
+			addPostalError();
+       		success = false;
+       		return success;
+		}
+	}else if (parceltype == "Small parcel"){
+		if (parcelweight <= 2000){
+			removePostalError();
+			return success;
+		}else{
+			addPostalError();
+       		success = false;
+       		return success;
+		}
+	}else if (parceltype == "Medium parcel"){
+		if (parcelweight <= 20000){
+			removePostalError();
+			return success;
+		}else{
+			addPostalError();
+       		success = false;
+       		return success;
+		}
+	}else if (parceltype == "Large parcel"){
+		// Any weight is OK for large parcels
+		removePostalError();
+		return success;
+	}
+}
+
+function addPostalError(){
+		$(".errorMsgPostal").show();
+       	$('.errorMsgPostal').css('display','inline-block');
+}
+function removePostalError(){
+	$(".errorMsgPostal").hide();
 }
 
 </script>

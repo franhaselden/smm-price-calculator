@@ -29,6 +29,7 @@ form#calc span{margin-bottom:15px;display:block;}
 /* Validation stuff */
 .errorInput{border:1px solid red;}
 p.errorMsg{display:none;color:red;font-size:12px;margin-left:15px;}
+p.errorMsgPostal{display:none;color:red;font-size:12px;margin-left:15px;}
 
 /* Modal stuff */
 #calc-modal {
