@@ -22,17 +22,25 @@
 				<select>
 				  <option value="letter">Letter</option>
 				  <option value="lgletter">Large Letter</option>
-				  <option value="sparcel">Small parcel</option>
+				  <option value="sparcel" selected="selected">Small parcel</option>
 				  <option value="mparcel">Medium parcel</option>
 				  <option value="lparcel">Large parcel</option>
 				</select>
 &nbsp;<small class="open-modal">Not sure?</small><br /></span>
+			<div class="btn btnCalc" id="dontknow">Calculate</div><p class="errorMsg">You must fill in all the fields</p>
+				<div class="result">
+					<p>You should charge around £19.85 for your product.<br />
+					You will take home £17.60.</p>
+				</div>
 		</div>
 		<span><input type="radio" name="option" class="decisionRadio" id="haveprice" value="haveprice">I know how much I charge offline and I only need to factor in fees for online selling</span>
 		<div class="haveprice-calc">
 			<h3>Test</h3>
+			<span><div class="btn btnCalc" id="haveprice">Calculate</div></span>
 		</div>
 	</form>
+
+<!-- start of modal -->
 <div id="calc-modal">
 	<div class="inner-modal">
 		<h3>Royal Mail Parcel Types</h3>
@@ -82,24 +90,47 @@
 		<span class="close-modal">Close</span>
 	</div>
 </div>
-
+<!-- end of modal -->
 </div>
 </body>
 <script>
-$( ".decisionRadio" ).change(function() {
+$(".decisionRadio").change(function() {
   var checked = $('input[name=option]:checked', '#calc').val();
   var unchecked = $('input[name=option]:not(:checked)', '#calc').val();
   $("." + checked + "-calc").slideDown( "slow", function() {});
   $("." + unchecked + "-calc").slideUp( "slow", function() {});
 });
 
-$( ".open-modal" ).click(function() {
+$(".btnCalc").click(function() {
+	var id = this.id;
+	console.log(id);
+	var valid = validate(id);
+});
+
+$(".open-modal").click(function() {
 	$('#calc-modal').fadeIn("fast");
 });
 
-$( ".close-modal" ).click(function() {
+$(".close-modal").click(function() {
 	$('#calc-modal').fadeOut("fast");
 });
+
+function validate(id){
+    // checks only inputs with type "text" inside div id-calc
+    // e.g #haveprice-calc or #dontknow-calc
+    var div = $("." + id + "-calc");
+    $(div).find("input[type = 'text']").each(function() {
+        if(this.value == ""){
+            $(this).addClass("errorInput");
+       		$(".errorMsg").show();
+       		$('.errorMsg').css('display','inline-block');
+       	}else{
+       		$(this).removeClass("errorInput");
+       		$(".errorMsg").hide();
+       	}
+    });
+}
+
 </script>
 
 </html>
