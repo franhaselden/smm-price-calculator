@@ -105,8 +105,8 @@ $(".btnCalc").click(function() {
 	var id = this.id;
 	var valid = validate(id);
 	if (valid == true){
-		var postageValid = checkPostage();
-		//calculate(id);
+		var weightValid = checkWeight();
+		alert(weightValid);
 	}
 });
 
@@ -139,10 +139,8 @@ function calculate(id){
 	if (id = "dontknow"){
 		var materialcost = $('input[name=materialcost]').val();
 		var packingmaterialcost = $('input[name=packingmaterialcost]').val();
-		var parcelweight = $('input[name=parcelweight]').val();
-		var parceltype = $('input[name=parceltype]').val();
 
-		calculatePostage(parcelweight,parceltype);
+		//var postagePrice = calculatePostage();
 
 		var a = materialcost*2; // times 2
 		var b = a/100; // find 1%
@@ -169,51 +167,44 @@ function calculate(id){
 	}
 }
 
-function checkPostage(){
+function calculatePostage(){
 	var parcelweight = $('input[name=parcelweight]').val();
 	var parceltype = $('#parceltype').find(":selected").text();
-	var success = true;
+
 	if (parceltype == "Letter"){
-		if (parcelweight <= 100){
-			removePostalError();
-			return success;
-		}else{
-			addPostalError();
-       		success = false;
-       		return success;
-		}
-	}else if (parceltype == "Large Letter"){
-		if (parcelweight <= 750){
-			removePostalError();
-			return success;
-		}else{
-			addPostalError();
-       		success = false;
-       		return success;
-		}
-	}else if (parceltype == "Small parcel"){
-		if (parcelweight <= 2000){
-			removePostalError();
-			return success;
-		}else{
-			addPostalError();
-       		success = false;
-       		return success;
-		}
-	}else if (parceltype == "Medium parcel"){
-		if (parcelweight <= 20000){
-			removePostalError();
-			return success;
-		}else{
-			addPostalError();
-       		success = false;
-       		return success;
-		}
-	}else if (parceltype == "Large parcel"){
-		// Any weight is OK for large parcels
-		removePostalError();
-		return success;
+		letterPrice = letterPrice(parcelweight,parceltype);
+
+	}else if(parceltype == "Large Letter"){
+		largeLetterPrice = largeLetterPrice(parcelweight,parceltype);
+
+	}else if(parceltype == "Small parcel"){
+		smallParcelPrice = smallParcelPrice(parcelweight,parceltype);
+
+	}else if(parceltype == "Medium parcel"){
+		mediumParcelPrice = mediumParcelPrice(parcelweight,parceltype);
+
+	}else if(parceltype == "Large parcel"){
+		largeParcelPrice = largeParcelPrice(parcelweight,parceltype);
+
 	}
+
+	return postagePrice;
+}
+
+function letterPrice(parcelweight,parceltype){
+
+}
+function largeLetterPrice(parcelweight,parceltype){
+
+}
+function smallParcelPrice(parcelweight,parceltype){
+
+}
+function mediumParcelPrice(parcelweight,parceltype){
+
+}
+function largeParcelPrice(parcelweight,parceltype){
+
 }
 
 function addPostalError(){
@@ -222,6 +213,29 @@ function addPostalError(){
 }
 function removePostalError(){
 	$(".errorMsgPostal").hide();
+}
+
+var weights = {
+  'Letter': 100,
+  'Large Letter': 750,
+  'Small parcel': 2000,
+  'Medium parcel': 20000,
+  'Large parcel': 0
+}
+
+function checkWeight() {  
+	var parcelweight = $('input[name=parcelweight]').val();
+	var parceltype = $('#parceltype').find(":selected").text();
+	console.log("parcel weight = " + parcelweight + " and parcel type = " + parceltype);
+
+        if (parcelweight <= weights[parceltype]) {
+        	console.log("parcel weight true/ok");
+            return true;
+        }else{
+        	console.log("parcel weight false/not ok");
+        	return false;
+        }
+
 }
 
 </script>
