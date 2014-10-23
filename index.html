@@ -10,7 +10,7 @@
 <div class="wrapper">
 	<!--<h1>Student Makers Market Pricing Calculator</h1>-->
 	<p>How much should I charge for a product I've made? How much will fees cost?</p>
-	<p>A good rule of thumb is the <strong>materials cost x 2 + 20%</strong>(the 20% part is the VAT element, so when selling wholesale don't add 20%), but this does not factor in the cost of fees for selling online.</p>
+	<p>A good rule of thumb is the <strong>materials cost x 2 + 20%</strong> (the 20% part is the VAT element, so when selling wholesale don't add 20%), but this does not factor in the cost of fees for selling online.</p>
 	<p>This calculator is only a guide to help you decide how much to charge. Charge whatever you feel comfortable with, but don't undervalue yourself!</p>
 	<form id="calc">
 		<span><input type="radio" name="option" class="decisionRadio" id="dontknow" value="dontknow">I don't know how much to charge at all<br></span>
@@ -106,16 +106,13 @@ $(".btnCalc").click(function() {
 	var valid = validate(id);
 	if (valid == true){
 		var weightValid = checkWeight();
-		alert(weightValid);
+		if (weightValid == true){
+			removePostalError();
+			calculate(id);
+		}else{
+			addPostalError();
+		}
 	}
-});
-
-$(".open-modal").click(function() {
-	$('#calc-modal').fadeIn("fast");
-});
-
-$(".close-modal").click(function() {
-	$('#calc-modal').fadeOut("fast");
 });
 
 function validate(id){
@@ -140,27 +137,45 @@ function calculate(id){
 		var materialcost = $('input[name=materialcost]').val();
 		var packingmaterialcost = $('input[name=packingmaterialcost]').val();
 
-		//var postagePrice = calculatePostage();
+		var postagePrice = calculatePostage();
 
 		var a = materialcost*2; // times 2
 		var b = a/100; // find 1%
 		var c = b*120; // find 120%
-		var d = c/100; // find 1% of that
-		var e = d*110; // find 110%
-		var f = e/100; // find 1% of that
-		var g = f*103.4; // find 103.4%
-		var h = g+0.2; // Add 20p
+		var d = c+packingmaterialcost; // Add the packing cost
+		var d = parseFloat(d);
+		var d = d+postagePrice; // Add the postage cost
+		var e = d/100; // Find 1% of that
+		var f = e*110; // add 10% for SMM commission
+		var g = f/100; // find 1% of that
+		var h = g*103.34; // add 3.4%
+		var i = h+0.2; // add 20p
 
-		// Round to 2 decimals
-		fullprice = h.toFixed(2);
-		console.log("You should charge:" + fullprice);
+		var fullprice = i;
+		fullpriceofproduct = fullprice-postagePrice;
+		fullpriceofproduct = fullpriceofproduct.toFixed(2);
+
+		fullprice = fullprice.toFixed(2);
+
+		console.log("You should charge: " + fullpriceofproduct + " for your product and " + postagePrice + " for First Class postage.");
 
 		// Work out what commissions will be
-		paypalfee = f.toFixed(2);
-		console.log("First, PayPal will take 3.4% and 20p, that's a payment fee of " + paypalfee);
+		paypalfee = g*3.4;
+		paypalfee = paypalfee+0.2;
+		paypalfee2dec = paypalfee.toFixed(2);
+		console.log("First, PayPal will take 3.4% and 20p, that's a payment fee of " + paypalfee2dec);
 
-		//console.log("Next, SMM will take 10% commission for promoting your product. That's " + smmfee);
-		//console.log("You'll receive " + makerfee);
+		smmfee = f+paypalfee;
+		smmfee = smmfee/100;
+		smmfee = smmfee*10;
+		smmfee = smmfee.toFixed(2);
+		console.log("Next, SMM will take 10% commission for promoting your product. That's " + smmfee);
+
+		d = d.toFixed(2);
+
+		console.log("So you'll receive " + d + " for the sale. You'll want to set aside " + postagePrice + " to cover your postage costs and put " + packingmaterialcost + " away into your supplies float for buying new packing supplies. You'll get " + d + " from your product.");
+		return false;
+		
 
 	}else if (id = "haveprice"){
 
@@ -172,39 +187,83 @@ function calculatePostage(){
 	var parceltype = $('#parceltype').find(":selected").text();
 
 	if (parceltype == "Letter"){
-		letterPrice = letterPrice(parcelweight,parceltype);
-
+		var postagePrice = letterPrice(parcelweight,parceltype);
 	}else if(parceltype == "Large Letter"){
-		largeLetterPrice = largeLetterPrice(parcelweight,parceltype);
-
+		var postagePrice = largeLetterPrice(parcelweight,parceltype);
 	}else if(parceltype == "Small parcel"){
-		smallParcelPrice = smallParcelPrice(parcelweight,parceltype);
-
+		var postagePrice = smallParcelPrice(parcelweight,parceltype);
 	}else if(parceltype == "Medium parcel"){
-		mediumParcelPrice = mediumParcelPrice(parcelweight,parceltype);
-
+		var postagePrice = mediumParcelPrice(parcelweight,parceltype);
 	}else if(parceltype == "Large parcel"){
-		largeParcelPrice = largeParcelPrice(parcelweight,parceltype);
-
+		var postagePrice = largeParcelPrice(parcelweight,parceltype);
 	}
-
 	return postagePrice;
 }
 
 function letterPrice(parcelweight,parceltype){
-
+	if(parcelweight <= 100){
+		removePostalError();
+		var price = 0.62;
+		return price;
+	}else{
+		addPostalError();
+	}
 }
-function largeLetterPrice(parcelweight,parceltype){
 
+function largeLetterPrice(parcelweight,parceltype){
+	if(parcelweight <= 100){
+		removePostalError();
+		var price = 0.93;
+		return price;
+	}else if(parcelweight <= 250){
+		var price = 1.24;
+		return price;
+	}else if(parcelweight <= 500){
+		var price = 1.65;
+		return price;
+	}else if(parcelweight <= 750){
+		var price = 2.38;
+		return price;
+	}else{
+		addPostalError();
+	}
 }
 function smallParcelPrice(parcelweight,parceltype){
-
+	if(parcelweight <= 1000){
+		removePostalError();
+		var price = 3.20;
+		return price;
+	}else if(parcelweight <= 2000){
+		var price = 5.45;
+		return price;
+	}else{
+		addPostalError();
+	}
 }
 function mediumParcelPrice(parcelweight,parceltype){
+	if(parcelweight <= 1000){
+		removePostalError();
+		var price = 5.65;
+		return price;
+	}else if(parcelweight <= 2000){
+		var price = 8.90;
+		return price;
+	}else if(parcelweight <= 5000){
+		var price = 15.85;
+		return price;
+	}else if(parcelweight <= 10000){
+		var price = 21.90;
+		return price;
+	}else if(parcelweight <= 20000){
+		var price = 33.40;
+		return price;
+	}else{
+		addPostalError();
+	}
 
 }
 function largeParcelPrice(parcelweight,parceltype){
-
+	var price = 50;
 }
 
 function addPostalError(){
@@ -226,17 +285,20 @@ var weights = {
 function checkWeight() {  
 	var parcelweight = $('input[name=parcelweight]').val();
 	var parceltype = $('#parceltype').find(":selected").text();
-	console.log("parcel weight = " + parcelweight + " and parcel type = " + parceltype);
-
         if (parcelweight <= weights[parceltype]) {
-        	console.log("parcel weight true/ok");
             return true;
         }else{
-        	console.log("parcel weight false/not ok");
         	return false;
         }
-
 }
+
+$(".open-modal").click(function() {
+	$('#calc-modal').fadeIn("fast");
+});
+
+$(".close-modal").click(function() {
+	$('#calc-modal').fadeOut("fast");
+});
 
 </script>
 
