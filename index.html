@@ -7,7 +7,31 @@
 </head>
 
 <body>
-The content of the document......
+<div class="wrapper">
+	<!--<h1>Student Makers Market Pricing Calculator</h1>-->
+	<p>How much should I charge for a product I’ve made? How much will fees cost?</p>
+	<p>A good rule of thumb is the <strong>materials cost x 2 + 20%</strong>(the 20% part is the VAT element, so when selling wholesale don't add 20%), but this does not factor in the cost of fees for selling online.</p>
+	<p>This calculator is only a guide to help you decide how much to charge. Charge whatever you feel comfortable with, but don’t undervalue yourself!</p>
+	<form id="calc">
+		<span><input type="radio" name="option" class="decisionRadio" id="dontknow" value="dontknow">I don't know how much to charge at all<br></span>
+		<div class="dontknow-calc">
+			
+
+		</div>
+		<span><input type="radio" name="option" class="decisionRadio" id="haveprice" value="haveprice">I know how much I charge offline and I only need to factor in fees for online selling</span>
+		<div class="haveprice-calc">
+			<h3>Test</h3>
+		</div>
+	</form>
+</div>
 </body>
+<script>
+$( ".decisionRadio" ).change(function() {
+  var checked = $('input[name=option]:checked', '#calc').val();
+  var unchecked = $('input[name=option]:not(:checked)', '#calc').val();
+  $("." + checked + "-calc").slideDown( "slow", function() {});
+  $("." + unchecked + "-calc").slideUp( "slow", function() {});
+});
+</script
 
 </html>

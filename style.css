@@ -1,0 +1,9 @@
+body{font-family:"Trebuchet MS", Helvetica, sans-serif;background-image:url(http://subtlepatterns.com/patterns/light_grey.png);color:#202020;}
+.wrapper{width:600px;margin:0 auto;}
+form#calc {background-color:#fff;border-top:3px solid #ccc;padding:20px;}
+form#calc span{margin-bottom:15px;display:block;}
+
+.dontknow-calc, .haveprice-calc{
+	display:none;
+	overflow: hidden;
+}
